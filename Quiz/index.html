@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background: #fafafa;
+    }
+    .quiz {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      background: white;
+    }
+    button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .option {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      width: 100%;
+      text-align: left;
+      background: #f9f9f9;
+    }
+    .option:hover {
+      background: #eaeaea;
+    }
+    .correct {
+      background: #c8f7c5 !important;
+      border-color: #6bbf59;
+    }
+    .wrong {
+      background: #f7c5c5 !important;
+      border-color: #bf5959;
+    }
+    #status {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quiz App</h1>
+  <button id="loadQuizzes">Load All Quizzes</button>
+  <button id="loadRandom">Load Random Quiz</button>
+
+  <div id="quizContainer"></div>
+  <p id="status"></p>
+
+  <script>
+    const quizContainer = document.getElementById('quizContainer');
+    const loadQuizzesBtn = document.getElementById('loadQuizzes');
+    const loadRandomBtn = document.getElementById('loadRandom');
+    const status = document.getElementById('status');
+
+    const API_BASE = "http://localhost:5112/api/Quiz";
+
+    // Fetch all quizzes from backend
+    async function getAllQuizzes() {
+      quizContainer.innerHTML = "<p>Loading quiz questions...</p>";
+      status.textContent = "";
+      try {
+        const res = await fetch(API_BASE);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const quizzes = await res.json();
+        displayQuizzes(quizzes);
+      } catch (error) {
+        quizContainer.innerHTML = "";
+        status.textContent = "❌ Failed to load quiz .";
+        status.classList.add("error");
+        console.error("Fetch error:", error);
+      }
+    }
+
+    // Fetch one random quiz from backend
+    async function getRandomQuiz() {
+      quizContainer.innerHTML = "<p>Loading random quiz...</p>";
+      status.textContent = "";
+      try {
+        const res = await fetch(`${API_BASE}/rand`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const quiz = await res.json();
+        displayQuizzes([quiz]);
+      } catch (error) {
+        quizContainer.innerHTML = "";
+        status.textContent = "❌ Failed to load random quiz..";
+        status.classList.add("error");
+        console.error("Fetch error:", error);
+      }
+    }
+
+    // Display quizzes on page
+    function displayQuizzes(quizzes) {
+      quizContainer.innerHTML = "";
+      quizzes.forEach(quiz => {
+        const div = document.createElement("div");
+        div.className = "quiz";
+        div.innerHTML = `<h3>${quiz.question}</h3>`;
+
+        quiz.options.forEach(option => {
+          const btn = document.createElement("button");
+          btn.className = "option";
+          btn.textContent = option;
+          btn.addEventListener("click", () => checkAnswer(btn, option, quiz.answer));
+          div.appendChild(btn);
+        });
+
+        quizContainer.appendChild(div);
+      });
+    }
+
+    // Check the selected answer
+    function checkAnswer(button, selected, correct) {
+      const allOptions = button.parentElement.querySelectorAll(".option");
+      allOptions.forEach(b => b.disabled = true);
+      if (selected === correct) {
+        button.classList.add("correct");
+        status.textContent = "✅ Correct!";
+        status.classList.remove("error");
+      } else {
+        button.classList.add("wrong");
+        status.textContent = `❌ Wrong! Correct answer: ${correct}`;
+        status.classList.remove("error");
+      }
+    }
+
+    // Button listeners
+    loadQuizzesBtn.addEventListener("click", getAllQuizzes);
+    loadRandomBtn.addEventListener("click", getRandomQuiz);
+  </script>
+</body>
+</html>
