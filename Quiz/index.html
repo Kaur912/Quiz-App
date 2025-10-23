@@ -5,10 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz App</title>
   <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing: border-box;
+      
+    }
     body {
-      font-family: sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       margin: 2rem;
-      background: #fafafa;
+      
+      background: #001e48;
+    }
+
+    .app{
+      background: #fff;
+      width:90%;
+      max-width:600px;
+      margin: 50px auto 0;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #btn{
+      width:90%;
+      max-width:600px;
+      margin: 50px auto 0;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
     }
     .quiz {
       border: 1px solid #ccc;
@@ -48,13 +74,16 @@
     #status {
       margin-top: 1rem;
       font-weight: bold;
+      color: #fff;
     }
   </style>
 </head>
 <body>
-  <h1>Quiz App</h1>
-  <button id="loadQuizzes">Load All Quizzes</button>
-  <button id="loadRandom">Load Random Quiz</button>
+  
+  <div class="app"><h1 >Quiz App</h1></div>
+  <div id="btn"><button id="loadQuizzes">Load All Questions</button>
+  <button id="loadRandom">Load Random Question</button>
+  </div>
 
   <div id="quizContainer"></div>
   <p id="status"></p>
@@ -67,9 +96,9 @@
 
     const API_BASE = "http://localhost:5112/api/Quiz";
 
-    // Fetch all quizzes from backend
+    // Fetch all quiz questions
     async function getAllQuizzes() {
-      quizContainer.innerHTML = "<p>Loading quiz questions...</p>";
+      quizContainer.innerHTML = "<p style='color:white;'>Loading quiz questions...</p>";
       status.textContent = "";
       try {
         const res = await fetch(API_BASE);
@@ -86,7 +115,7 @@
 
     // Fetch one random quiz from backend
     async function getRandomQuiz() {
-      quizContainer.innerHTML = "<p>Loading random quiz...</p>";
+      quizContainer.innerHTML = "<p style='color:white;'>Loading random quiz...</p>";
       status.textContent = "";
       try {
         const res = await fetch(`${API_BASE}/rand`);

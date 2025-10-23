@@ -30,3 +30,4 @@ C:\Users\0498k\OneDrive\Desktop\QuizApp\Quiz\obj\Debug\net9.0\refint\Quiz.dll
 C:\Users\0498k\OneDrive\Desktop\QuizApp\Quiz\obj\Debug\net9.0\Quiz.pdb
 C:\Users\0498k\OneDrive\Desktop\QuizApp\Quiz\obj\Debug\net9.0\Quiz.genruntimeconfig.cache
 C:\Users\0498k\OneDrive\Desktop\QuizApp\Quiz\obj\Debug\net9.0\ref\Quiz.dll
+C:\Users\0498k\OneDrive\Desktop\QuizApp\Quiz\obj\Debug\net9.0\Quiz.sourcelink.json
